@@ -1,0 +1,33 @@
+version: '3.2'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: testwolf123
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: test_user
+      MYSQL_PASSWORD: wolf456
+    ports:
+      - "6033:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    links:
+      - db
+        # environment:
+        #PMA_HOST: db
+        #PMA_PORT: 3306
+        #PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 9081:80
+    volumes:
+            - type: bind
+              source: ./config.inc.php  
+              target: /etc/myphpadmin/config.inc.php
+volumes:
+  dbdata:
